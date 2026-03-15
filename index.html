@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Vaishnavi! 🎂</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="floating-pic pic-1"><img src="v1.jpeg" alt="memory"></div>
+        <div class="floating-pic pic-2"><img src="v2.jpeg" alt="memory"></div>
+        <div class="floating-pic pic-3"><img src="v3.jpeg" alt="memory"></div>
+        <div class="floating-pic pic-4"><img src="v5.jpeg" alt="memory"></div>
+
+        <div class="glass-card">
+            <h1>Happy Birthday Vaishnavi</h1>
+            <p class="tagline">The world got a little brighter today. ✨</p>
+            
+            <div id="timer" class="countdown">Calculating the magic...</div>
+
+            <div class="envelope-wrapper">
+                <div id="envelope" class="envelope close">
+                    <div class="front flap"></div>
+                    <div class="front pocket"></div>
+                    <div class="letter">
+                        <div class="letter-text">
+                            <h2>Dearest Vaishnavi,</h2>
+                            <p>They say people come and go, but I really hope you’re the exception to that rule. You’ve become my absolute comfort zone. No matter how chaotic my day gets or how much is on my mind, talking to you is the one thing that makes everything feel okay again.
+                                I don't think I've ever told you how much I value our 2 AM talks and the fact that I can be my 100% unfiltered self with you. Thank you for being the person I can talk to all day without ever getting bored. You’re my best friend, my safe space, and I want it to stay this way forever.
+                                Happy Birthday, Navi! Here’s to us being best friends always..</p>
+                            
+                            <p class="signature">Love, Tejas</p>
+                        </div>
+                    </div>
+                </div>
+                <p id="envelope-hint">This letter is sealed until midnight... 🔒</p>
+            </div>
+
+            <button class="btn-celebrate" onclick="fireworks()">MAKE A WISH!</button>
+        </div>
+    </section>
+
+    <section class="photo-container">
+        <h2>Memories with Vaishnavi ✨</h2>
+        <div class="polaroid-stack">
+            <div class="polaroid"><img src="v6.jpeg" alt="M1"><div class="caption">Best Day Ever! 🍦</div></div>
+            <div class="polaroid"><img src="v7.jpeg" alt="M2"><div class="caption">That 2 AM call... 😂</div></div>
+            <div class="polaroid"><img src="v8.jpeg" alt="M3"><div class="caption">Always matching! 👯‍♀️</div></div>
+            <div class="polaroid"><img src="v11.jpeg" alt="M4"><div class="caption">The Foodies 🍕</div></div>
+            <div class="polaroid"><img src="v10.jpeg" alt="M5"><div class="caption">Nonchalant Duo 🕶️</div></div>
+            <div class="polaroid"><img src="v9.jpeg" alt="M6"><div class="caption">Black Fit 🖤</div></div>
+        </div>
+    </section>
+
+    <script>
+        // TARGET: Tomorrow at 00:00:00
+        const targetDate = new Date(); 
+        targetDate.setDate(targetDate.getDate() + 1); 
+        targetDate.setHours(0, 0, 0, 0);
+
+        let hasCelebrated = false;
+
+        function fireworks() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#7209b7', '#f72585', '#4cc9f0', '#ffffff']
+            });
+        }
+
+        const envelope = document.getElementById('envelope');
+        const hint = document.getElementById('envelope-hint');
+
+        envelope.addEventListener('click', () => {
+            if (new Date().getTime() < targetDate.getTime()) {
+                envelope.classList.add('shake');
+                hint.innerHTML = "Patience, Vaishnavi! Only at midnight... 🔒";
+                setTimeout(() => envelope.classList.remove('shake'), 500);
+            }
+        });
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            const timerElement = document.getElementById('timer');
+
+            if (diff <= 0) {
+                timerElement.innerHTML = "HAPPY BIRTHDAY VAISHNAVI! 👑";
+                timerElement.style.color = "#f72585";
+                envelope.classList.remove('close');
+                envelope.classList.add('open');
+                hint.innerHTML = "Your letter is now open! ✨";
+
+                if (!hasCelebrated) { fireworks(); hasCelebrated = true; }
+                clearInterval(timerInterval);
+                return;
+            }
+
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            timerElement.innerHTML = `The party starts in: ${h}h ${m}m ${s}s`;
+        }
+
+        const timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body>
+</html>
