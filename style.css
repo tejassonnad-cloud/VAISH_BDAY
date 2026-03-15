@@ -1,98 +1,83 @@
 :root { --primary: #7209b7; --accent: #f72585; --bg: #f8f9fa; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: 'Poppins', sans-serif; background: var(--bg); overflow-x: hidden; }
+body { font-family: 'Poppins', sans-serif; background: var(--bg); overflow-x: hidden; text-align: center; }
 
-/* Background Hearts */
 #hearts-bg { position: fixed; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-.bg-heart { position: absolute; bottom: -20px; animation: floatUp linear forwards; }
+.bg-heart { position: absolute; bottom: -20px; animation: floatUp linear forwards; font-size: 20px; }
 @keyframes floatUp { to { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
 
-/* Hero Stages */
-.hero { height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; transition: 5s; background: linear-gradient(135deg, #7209b7, #3a0ca3); }
-.stage-15min { background: linear-gradient(135deg, #560bad, #3a0ca3) !important; }
-.stage-5min { background: linear-gradient(135deg, #3a0ca3, #0f0c29) !important; }
-.stage-1min { background: linear-gradient(135deg, #000, #1a1a1a) !important; }
+.hero { height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; transition: 5s; background: linear-gradient(135deg, #7209b7, #3a0ca3); color: white; padding: 20px; }
 .stage-birthday { background: linear-gradient(135deg, #f72585, #7209b7) !important; animation: pulse 4s infinite alternate; }
 @keyframes pulse { from { filter: brightness(1); } to { filter: brightness(1.2); } }
 
-/* Glass Card */
-.glass-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(15px); padding: 2rem; border-radius: 25px; width: 92%; max-width: 420px; z-index: 10; color: white; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-
-/* DESIGNED BUTTON */
-.btn-celebrate { 
-    display: inline-block;
-    margin-top: 15px;
-    padding: 12px 28px; 
-    background: var(--accent); 
-    color: white; 
-    border: none; 
-    border-radius: 50px; 
-    font-weight: 600; 
-    font-size: 1rem;
-    cursor: pointer; 
-    transition: 0.3s;
-    box-shadow: 0 4px 15px rgba(247, 37, 133, 0.4);
+/* Layout adjustments for side-by-side items */
+.glass-card { 
+    background: rgba(255,255,255,0.1); 
+    backdrop-filter: blur(15px); 
+    padding: 2rem; 
+    border-radius: 25px; 
+    width: 95%; 
+    max-width: 650px; /* Widened to fit side-by-side */
+    z-index: 10; 
+    border: 1px solid rgba(255,255,255,0.2); 
 }
-.btn-celebrate:hover { transform: scale(1.05); background: #d01d6d; }
 
-/* Envelope */
-.envelope { position: relative; width: 220px; height: 140px; background: var(--accent); margin: 25px auto; transition: 0.5s; }
-.flap { position: absolute; top: 0; border-left: 110px solid transparent; border-right: 110px solid transparent; border-top: 80px solid #7209b7; transform-origin: top; z-index: 3; transition: 0.4s; }
-.pocket { position: absolute; bottom: 0; border-left: 110px solid var(--accent); border-right: 110px solid var(--accent); border-bottom: 75px solid #b5179e; z-index: 4; }
-.letter { position: absolute; background: white; width: 90%; height: 85%; top: 5%; left: 5%; z-index: 2; transition: 0.6s; padding: 20px; color: #333; text-align: left; overflow: hidden; }
+.action-row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap; /* Stacks on mobile */
+    gap: 30px;
+    margin: 20px 0;
+}
+
+/* Cake UI */
+#cake-instruction { color: #fff; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
+.cake-container { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: inline-block; cursor: pointer; position: relative; z-index: 101; }
+.cake { position: relative; width: 80px; height: 50px; background: #f4d03f; border-radius: 8px 8px 0 0; box-shadow: inset 0 -4px #e5b91a; }
+.candle { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 20px; }
+.frosting { position: absolute; top: 0; width: 100%; height: 15px; background: #fff; border-radius: 8px 8px 0 0; }
+
+/* Envelope UI */
+.envelope-wrapper { position: relative; }
+.envelope { position: relative; width: 180px; height: 120px; background: var(--accent); transition: 0.5s; overflow: hidden; z-index: 5; }
+.envelope.open { overflow: visible; }
+.flap { position: absolute; top: 0; border-left: 90px solid transparent; border-right: 90px solid transparent; border-top: 65px solid #7209b7; transform-origin: top; z-index: 3; transition: 0.4s; }
+.pocket { position: absolute; bottom: 0; border-left: 90px solid var(--accent); border-right: 90px solid var(--accent); border-bottom: 60px solid #b5179e; z-index: 4; }
+.letter { position: absolute; background: white; width: 90%; height: 85%; top: 5%; left: 5%; z-index: 2; transition: 0.6s; padding: 12px; color: #333; text-align: left; font-size: 0.8rem; }
 .envelope.open .flap { transform: rotateX(180deg); z-index: 1; }
-.envelope.open .letter { transform: translateY(-160px); height: auto; min-height: 350px; width: 300px; left: 50%; margin-left: -150px; z-index: 15; box-shadow: 0 15px 45px rgba(0,0,0,0.5); overflow-y: auto; }
+.envelope.open .letter { transform: translateY(-140px); height: auto; min-height: 300px; width: 260px; left: 50%; margin-left: -130px; z-index: 15; box-shadow: 0 15px 45px rgba(0,0,0,0.4); overflow-y: auto; font-size: 0.95rem; }
+#hint { font-size: 0.8rem; margin-top: 8px; font-weight: bold; }
 
-/* Scratch Card */
-.scratch-section { padding: 60px 20px; text-align: center; background: #fff; }
-.scratch-card-wrapper { position: relative; width: 300px; height: 150px; margin: 30px auto; background: #fdf0f5; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.scratch-reveal-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-weight: 600; color: #333; text-align: center; }
-.scratch-reveal-content span { color: var(--accent); display: block; font-size: 1.4rem; font-family: 'Permanent Marker', cursive; }
-#scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; }
+/* Scratch Section */
+.scratch-section { padding: 60px 20px; background: #fff; }
+.scratch-card-wrapper { position: relative; width: 300px; height: 150px; margin: 20px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.scratch-reveal-content { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #fdf0f5; }
+.scratch-reveal-content span { color: var(--accent); font-family: 'Permanent Marker', cursive; font-size: 1.4rem; }
+#scratch-canvas { position: absolute; top: 0; left: 0; touch-action: none; cursor: crosshair; }
 
 /* Stats */
-.stats-container { padding: 80px 20px; text-align: center; background: #fff; }
 .stats-box { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; padding: 40px 20px; border-radius: 30px; max-width: 500px; margin: 0 auto; }
-.journey-timer { font-size: 1.7rem; font-weight: bold; margin: 15px 0; font-family: monospace; }
+.journey-timer { font-size: 1.6rem; font-weight: bold; margin: 15px 0; font-family: monospace; }
 
-/* FIXED GALLERY PHOTO STYLES */
-.photo-container { padding: 80px 20px; text-align: center; background: white; }
-.polaroid-stack { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-    gap: 30px; 
-    max-width: 1100px; 
-    margin: 40px auto; 
-    padding: 0 15px;
-}
-.polaroid { 
-    background: white; 
-    padding: 15px 15px 45px 15px; 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
-    transform: rotate(calc(var(--r, 0) * 1deg));
-    transition: 0.3s;
-}
-.polaroid:nth-child(even) { --r: 2; }
-.polaroid:nth-child(odd) { --r: -2; }
-.polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 5; }
+/* Photo Grid */
+.polaroid-stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1100px; margin: 40px auto; padding: 0 15px; }
+@media (max-width: 900px) { .polaroid-stack { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .polaroid-stack { grid-template-columns: 1fr; } }
+.polaroid { background: white; padding: 10px 10px 35px 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); transition: 0.3s; }
+.polaroid img { width: 100%; height: 280px; object-fit: cover; }
+.caption { font-family: 'Permanent Marker', cursive; margin-top: 12px; color: #444; }
 
-.polaroid img { 
-    width: 100%; 
-    height: 300px; /* Fixed height ensures they look like polaroids */
-    object-fit: cover; /* This prevents the "stretching" you saw */
-    display: block;
-}
-.caption { font-family: 'Permanent Marker', cursive; margin-top: 15px; color: #444; font-size: 1.1rem; }
-
-/* Music & Hearts */
-.heart-pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent); font-size: 60px; animation: pop 0.8s ease-out; pointer-events: none; }
-.music-control { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 100; color: white; }
-@keyframes pop { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.5); opacity: 1; } 100% { opacity: 0; } }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-.floating-pic { position: absolute; width: 120px; height: 120px; background: white; padding: 5px; border-radius: 10px; z-index: 1; animation: float 5s infinite ease-in-out; }
+/* Floating Pics */
+.floating-pic { position: absolute; width: 100px; height: 100px; background: white; padding: 4px; border-radius: 8px; animation: float 5s infinite ease-in-out; z-index: 1; }
 .floating-pic img { width: 100%; height: 100%; object-fit: cover; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 .pic-1 { top: 5%; left: 5%; transform: rotate(-10deg); }
 .pic-2 { top: 5%; right: 5%; transform: rotate(10deg); }
 .pic-3 { bottom: 10%; left: 5%; transform: rotate(8deg); }
 .pic-4 { bottom: 10%; right: 5%; transform: rotate(-8deg); }
+
+/* Buttons & Music */
+.btn-celebrate { padding: 10px 24px; background: var(--accent); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+.music-control { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; color: white; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
