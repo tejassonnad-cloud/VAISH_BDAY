@@ -4,27 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday Vaishnavi! 🎂</title>
+    
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Permanent+Marker&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-    <audio id="bday-music" loop preload="auto">
+    <div id="hearts-bg"></div>
+
+    <audio id="bday-music" preload="auto">
         <source src="bday_song.mp3" type="audio/mpeg">
     </audio>
 
     <div class="main-wrapper">
-        <section class="hero">
-            <div class="floating-pic pic-1"><img src="v1.jpeg" alt="memory"></div>
-            <div class="floating-pic pic-2"><img src="v2.jpeg" alt="memory"></div>
-            <div class="floating-pic pic-3"><img src="v3.jpeg" alt="memory"></div>
-            <div class="floating-pic pic-4"><img src="v5.jpeg" alt="memory"></div>
+        <section class="hero" id="hero-bg">
+            <div class="floating-pic pic-1"><img src="v1.jpeg"></div>
+            <div class="floating-pic pic-2"><img src="v2.jpeg"></div>
+            <div class="floating-pic pic-3"><img src="v3.jpeg"></div>
+            <div class="floating-pic pic-4"><img src="v5.jpeg"></div>
 
             <div class="glass-card">
                 <h1>Happy Birthday Vaishnavi</h1>
                 <p class="tagline">The world got a little brighter today. ✨</p>
-                
                 <div id="timer" class="countdown">Calculating...</div>
 
                 <div class="envelope-wrapper">
@@ -34,29 +36,42 @@
                         <div class="letter">
                             <div class="letter-text">
                                 <h2>Dearest Vaishnavi,</h2>
-                                <p>They say people come and go, but I really hope you’re the exception to that rule. You’ve become my absolute comfort zone. No matter how chaotic my day gets, talking to you makes everything feel okay again.</p>
-                                <p>I value our 2 AM talks and being my 100% unfiltered self with you. You’re my best friend, my safe space, and I want it to stay this way forever.</p>
+                                <p>They say people come and go, but I really hope you’re the exception to that rule. You’ve become my absolute comfort zone.</p>
+                                <p>No matter how chaotic my day gets, talking to you makes everything feel okay again. I value our 2 AM talks and being my 100% unfiltered self with you. You’re my best friend, my safe space, and I want it to stay this way forever.</p>
                                 <p class="signature">Love, Tejas</p>
                             </div>
                         </div>
                     </div>
                     <p id="hint">This letter is sealed until midnight... 🔒</p>
                 </div>
-                
                 <button class="btn-celebrate" onclick="handleCelebration()">SEE OUR MEMORIES ❤️</button>
+            </div>
+        </section>
+
+        <section class="scratch-section">
+            <div class="scratch-container">
+                <h2>A Little Surprise... ✨</h2>
+                <p>Scratch the card to reveal a hidden message!</p>
+                <div class="scratch-card-wrapper">
+                    <div class="scratch-reveal-content">
+                        <p>You're not just my best friend,<br>you're my <span>Favorite Human</span>. ❤️</p>
+                    </div>
+                    <canvas id="scratch-canvas" width="300" height="150"></canvas>
+                </div>
             </div>
         </section>
 
         <section class="stats-container">
             <div class="stats-box">
                 <h3>Our Journey Together 🕒</h3>
-                <div id="friendship-timer" class="journey-timer">Calculating...</div>
+                <div id="friendship-timer" class="journey-timer">...</div>
                 <p>of being each other's comfort zone.</p>
             </div>
         </section>
 
         <section class="photo-container" id="gallery">
             <h2>Memories with Vaishnavi ✨</h2>
+            <p class="hint-text">(Double tap your favorites! ❤️)</p>
             <div class="polaroid-stack">
                 <div class="polaroid"><img src="v6.jpeg"><div class="caption">Best Day Ever! 🍦</div></div>
                 <div class="polaroid"><img src="v7.jpeg"><div class="caption">That 2 AM call... 😂</div></div>
@@ -73,79 +88,93 @@
     </div>
 
     <script>
-        // CONFIG
         const targetDate = new Date(); 
         targetDate.setDate(targetDate.getDate() + 1); 
-        targetDate.setHours(0, 0, 0, 0);
-         //const targetDate = new Date().getTime() + 5000; // UNCOMMENT FOR 5s TEST
-
-        const friendshipStartDate = new Date(2025, 3, 26); // April 26, 2025
+        targetDate.setHours(0, 0, 0, 0); 
+        const friendshipStartDate = new Date(2025, 3, 26); 
 
         let hasCelebrated = false;
-        let musicStarted = false; 
         const bdayMusic = document.getElementById('bday-music');
         const envelope = document.getElementById('envelope');
+        const heroBg = document.getElementById('hero-bg');
 
-        function handleCelebration() {
-            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
-            const now = new Date().getTime();
-            if (now >= targetDate) {
-                if (!musicStarted) playMusic();
-                triggerHeartConfetti();
-            }
+        // Background Hearts
+        setInterval(() => {
+            const container = document.getElementById('hearts-bg');
+            const heart = document.createElement('div');
+            heart.className = 'bg-heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            heart.style.opacity = Math.random() * 0.3;
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 8000);
+        }, 600);
+
+        // Scratch Card
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        function initScratchCard() {
+            ctx.fillStyle = '#c0c0c0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "20px Poppins";
+            ctx.fillStyle = "#7209b7";
+            ctx.textAlign = "center";
+            ctx.fillText("Scratch Me! ✨", canvas.width/2, canvas.height/2 + 7);
         }
-
-        function playMusic() {
-            bdayMusic.play().then(() => {
-                musicStarted = true;
-                document.getElementById('music-icon').classList.add('playing');
-            }).catch(e => console.log("Music ready after interaction."));
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
         }
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('touchstart', () => isDrawing = true);
+        window.addEventListener('mouseup', () => isDrawing = false);
+        window.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchmove', scratch);
+        initScratchCard();
 
-        function toggleMusic() {
-            const icon = document.getElementById('music-icon');
-            if (bdayMusic.paused) {
-                bdayMusic.play();
-                icon.classList.add('playing');
-            } else {
-                bdayMusic.pause();
-                icon.classList.remove('playing');
-            }
-        }
-
-        function triggerMegaFireworks() {
-            var duration = 15 * 1000;
-            var animationEnd = Date.now() + duration;
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                confetti({ 
-                    particleCount: 40, 
-                    spread: 360, 
-                    origin: { x: Math.random(), y: Math.random() - 0.2 },
-                    colors: ['#7209b7', '#f72585', '#4cc9f0', '#ffffff']
+        // Double Tap
+        document.querySelectorAll('.polaroid').forEach(card => {
+            card.addEventListener('dblclick', function(e) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart-pop';
+                this.appendChild(heart);
+                confetti({
+                    particleCount: 15, spread: 40,
+                    origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight },
+                    colors: ['#ff0a54', '#f72585']
                 });
-            }, 250);
-        }
+                setTimeout(() => heart.remove(), 800);
+            });
+        });
 
-        function triggerHeartConfetti() {
-            const heart = confetti.shapeFromPath({ path: 'M167 72c19,-38 37,-56 75,-56c44,0 75,33 75,77c0,84 -76,122 -150,211c-74,-89 -150,-127 -150,-211c0,-44 31,-77 75,-77c38,0 56,18 75,56z' });
-            confetti({ shapes: [heart], particleCount: 80, spread: 90, origin: { y: 0.6 }, colors: ['#ff0a54', '#f72585'], scalar: 2 });
-        }
-
+        // Timers
         function updateTimers() {
             const now = new Date();
-            
-            // Birthday Timer
             const diffBday = targetDate - now.getTime();
+            if (diffBday > 0) {
+                if (diffBday < 60000) heroBg.className = 'hero stage-1min';
+                else if (diffBday < 300000) heroBg.className = 'hero stage-5min';
+                else if (diffBday < 900000) heroBg.className = 'hero stage-15min';
+            }
             if (diffBday <= 0) {
                 document.getElementById('timer').innerHTML = "HAPPY BIRTHDAY VAISHNAVI! 👑";
+                heroBg.className = 'hero stage-birthday';
                 envelope.classList.remove('close');
                 envelope.classList.add('open');
-                document.getElementById('hint').innerHTML = "Your letter is open! ✨";
                 if (!hasCelebrated) {
-                    playMusic();
-                    triggerMegaFireworks();
+                    bdayMusic.play().catch(() => {});
+                    document.getElementById('music-icon').classList.add('playing');
+                    triggerFireworks();
                     hasCelebrated = true;
                 }
             } else {
@@ -154,14 +183,31 @@
                 const s = Math.floor((diffBday % 60000) / 1000);
                 document.getElementById('timer').innerHTML = `Starts in: ${h}h ${m}m ${s}s`;
             }
-
-            // Friendship Timer
             const diffFriend = now - friendshipStartDate;
             const d = Math.floor(diffFriend / (1000 * 60 * 60 * 24));
             const hr = Math.floor((diffFriend / (1000 * 60 * 60)) % 24);
             const mn = Math.floor((diffFriend / (1000 * 60)) % 60);
             const sc = Math.floor((diffFriend / 1000) % 60);
             document.getElementById('friendship-timer').innerHTML = `${d}d : ${hr}h : ${mn}m : ${sc}s`;
+        }
+
+        function triggerFireworks() {
+            var end = Date.now() + 15000;
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        function handleCelebration() {
+            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMusic() {
+            const icon = document.getElementById('music-icon');
+            if (bdayMusic.paused) { bdayMusic.play(); icon.classList.add('playing'); }
+            else { bdayMusic.pause(); icon.classList.remove('playing'); }
         }
 
         setInterval(updateTimers, 1000);
