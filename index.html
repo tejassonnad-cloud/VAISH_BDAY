@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday Vaishnavi! 🎂</title>
-    
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Permanent+Marker&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -29,21 +28,36 @@
                 <p class="tagline">The world got a little brighter today. ✨</p>
                 <div id="timer" class="countdown">Calculating...</div>
 
-                <div class="envelope-wrapper">
-                    <div id="envelope" class="envelope close">
-                        <div class="front flap"></div>
-                        <div class="front pocket"></div>
-                        <div class="letter">
-                            <div class="letter-text">
-                                <h2>Dearest Vaishnavi,</h2>
-                                <p>They say people come and go, but I really hope you’re the exception to that rule. You’ve become my absolute comfort zone.</p>
-                                <p>No matter how chaotic my day gets, talking to you makes everything feel okay again. I value our 2 AM talks and being my 100% unfiltered self with you. You’re my best friend, my safe space, and I want it to stay this way forever.</p>
-                                <p class="signature">Love, Tejas</p>
+                <div class="action-row">
+                    <div class="envelope-wrapper">
+                        <div id="envelope" class="envelope close">
+                            <div class="front flap"></div>
+                            <div class="front pocket"></div>
+                            <div class="letter">
+                                <div class="letter-text">
+                                    <h2>Dearest Vaishnavi,</h2>
+                                    <p>They say people come and go, but I really hope you’re the exception to that rule. You’ve become my absolute comfort zone.</p>
+                                    <p>No matter how chaotic my day gets, talking to you makes everything feel okay again. I value our 2 AM talks and being my 100% unfiltered self with you. You’re my best friend, my safe space, and I want it to stay this way forever.</p>
+                                    <p class="signature">Love, Tejas</p>
+                                </div>
                             </div>
                         </div>
+                        <p id="hint">Sealed until midnight... 🔒</p>
                     </div>
-                    <p id="hint">This letter is sealed until midnight... 🔒</p>
+
+                    <div id="cake-section" style="display: none;">
+                        <p id="cake-instruction">Catch the cake 19 times! 🎂</p>
+                        <div class="cake-container" id="cake-container">
+                            <div class="cake" id="interactive-cake" onclick="moveCake()">
+                                <div class="candle" id="candle">🔥</div>
+                                <div class="frosting"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <button class="btn-celebrate" id="blow-btn" style="display: none;" onclick="finalBlow()">Blow! 💨</button>
+                    </div>
                 </div>
+
                 <button class="btn-celebrate" onclick="handleCelebration()">SEE OUR MEMORIES ❤️</button>
             </div>
         </section>
@@ -51,7 +65,6 @@
         <section class="scratch-section">
             <div class="scratch-container">
                 <h2>A Little Surprise... ✨</h2>
-                <p>Scratch the card to reveal a hidden message!</p>
                 <div class="scratch-card-wrapper">
                     <div class="scratch-reveal-content">
                         <p>You're not just my best friend,<br>you're my <span>Favorite Human</span>. ❤️</p>
@@ -71,7 +84,6 @@
 
         <section class="photo-container" id="gallery">
             <h2>Memories with Vaishnavi ✨</h2>
-            <p class="hint-text">(Double tap your favorites! ❤️)</p>
             <div class="polaroid-stack">
                 <div class="polaroid"><img src="v6.jpeg"><div class="caption">Best Day Ever! 🍦</div></div>
                 <div class="polaroid"><img src="v7.jpeg"><div class="caption">That 2 AM call... 😂</div></div>
@@ -88,15 +100,13 @@
     </div>
 
     <script>
-        const targetDate = new Date(); 
-        targetDate.setDate(targetDate.getDate() + 1); 
-        targetDate.setHours(0, 0, 0, 0); 
+        const targetDate = new Date(2026, 2, 16, 0, 0, 0);
+        //const targetDate = new Date().getTime() + 10000; // Testing: 10 seconds. Change to real date for launch.
         const friendshipStartDate = new Date(2025, 3, 26); 
-
-        let hasCelebrated = false;
         const bdayMusic = document.getElementById('bday-music');
-        const envelope = document.getElementById('envelope');
-        const heroBg = document.getElementById('hero-bg');
+        let hasCelebrated = false;
+        let clickCount = 0;
+        const totalNeeded = 19;
 
         // Background Hearts
         setInterval(() => {
@@ -111,69 +121,19 @@
             setTimeout(() => heart.remove(), 8000);
         }, 600);
 
-        // Scratch Card
-        const canvas = document.getElementById('scratch-canvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        function initScratchCard() {
-            ctx.fillStyle = '#c0c0c0';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = "20px Poppins";
-            ctx.fillStyle = "#7209b7";
-            ctx.textAlign = "center";
-            ctx.fillText("Scratch Me! ✨", canvas.width/2, canvas.height/2 + 7);
-        }
-        function scratch(e) {
-            if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(x, y, 20, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        canvas.addEventListener('mousedown', () => isDrawing = true);
-        canvas.addEventListener('touchstart', () => isDrawing = true);
-        window.addEventListener('mouseup', () => isDrawing = false);
-        window.addEventListener('touchend', () => isDrawing = false);
-        canvas.addEventListener('mousemove', scratch);
-        canvas.addEventListener('touchmove', scratch);
-        initScratchCard();
-
-        // Double Tap
-        document.querySelectorAll('.polaroid').forEach(card => {
-            card.addEventListener('dblclick', function(e) {
-                const heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.className = 'heart-pop';
-                this.appendChild(heart);
-                confetti({
-                    particleCount: 15, spread: 40,
-                    origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight },
-                    colors: ['#ff0a54', '#f72585']
-                });
-                setTimeout(() => heart.remove(), 800);
-            });
-        });
-
-        // Timers
         function updateTimers() {
             const now = new Date();
-            const diffBday = targetDate - now.getTime();
-            if (diffBday > 0) {
-                if (diffBday < 60000) heroBg.className = 'hero stage-1min';
-                else if (diffBday < 300000) heroBg.className = 'hero stage-5min';
-                else if (diffBday < 900000) heroBg.className = 'hero stage-15min';
-            }
+            const diffBday = targetDate - now;
+
             if (diffBday <= 0) {
                 document.getElementById('timer').innerHTML = "HAPPY BIRTHDAY VAISHNAVI! 👑";
-                heroBg.className = 'hero stage-birthday';
-                envelope.classList.remove('close');
-                envelope.classList.add('open');
+                document.getElementById('hero-bg').classList.add('stage-birthday');
+                document.getElementById('cake-section').style.display = "block";
+                document.getElementById('hint').style.display = "none";
+                document.getElementById('envelope').classList.replace('close', 'open');
+                
                 if (!hasCelebrated) {
                     bdayMusic.play().catch(() => {});
-                    document.getElementById('music-icon').classList.add('playing');
                     triggerFireworks();
                     hasCelebrated = true;
                 }
@@ -183,6 +143,7 @@
                 const s = Math.floor((diffBday % 60000) / 1000);
                 document.getElementById('timer').innerHTML = `Starts in: ${h}h ${m}m ${s}s`;
             }
+
             const diffFriend = now - friendshipStartDate;
             const d = Math.floor(diffFriend / (1000 * 60 * 60 * 24));
             const hr = Math.floor((diffFriend / (1000 * 60 * 60)) % 24);
@@ -191,6 +152,59 @@
             document.getElementById('friendship-timer').innerHTML = `${d}d : ${hr}h : ${mn}m : ${sc}s`;
         }
 
+        function moveCake() {
+            if (clickCount < totalNeeded) {
+                clickCount++;
+                const cake = document.getElementById('cake-container');
+                const instruction = document.getElementById('cake-instruction');
+                
+                const randomX = Math.floor(Math.random() * 100) - 50; 
+                const randomY = Math.floor(Math.random() * 60) - 30; 
+                
+                cake.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                instruction.innerText = `Catch it! ${totalNeeded - clickCount} left...`;
+
+                if (clickCount === totalNeeded) {
+                    instruction.innerText = "You caught it! Wish time. ✨";
+                    cake.style.transform = `translate(0, 0)`; 
+                    document.getElementById('blow-btn').style.display = "inline-block";
+                    document.getElementById('interactive-cake').onclick = null;
+                }
+            }
+        }
+
+        function finalBlow() {
+            document.getElementById('candle').innerHTML = "💨";
+            setTimeout(() => { document.getElementById('candle').style.opacity = '0'; }, 500);
+            document.getElementById('blow-btn').innerText = "HBD! 🎂";
+            confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 } });
+        }
+
+        // Scratch Card Logic
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        ctx.fillStyle = '#c0c0c0';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "18px Poppins"; ctx.fillStyle = "#7209b7"; ctx.textAlign = "center";
+        ctx.fillText("Scratch for a surprise! ✨", 150, 85);
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI * 2); ctx.fill();
+        }
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
+        window.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchmove', scratch);
+
+        function handleCelebration() { document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' }); }
+        
         function triggerFireworks() {
             var end = Date.now() + 15000;
             (function frame() {
@@ -200,14 +214,8 @@
             }());
         }
 
-        function handleCelebration() {
-            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
-        }
-
         function toggleMusic() {
-            const icon = document.getElementById('music-icon');
-            if (bdayMusic.paused) { bdayMusic.play(); icon.classList.add('playing'); }
-            else { bdayMusic.pause(); icon.classList.remove('playing'); }
+            if (bdayMusic.paused) { bdayMusic.play(); } else { bdayMusic.pause(); }
         }
 
         setInterval(updateTimers, 1000);
